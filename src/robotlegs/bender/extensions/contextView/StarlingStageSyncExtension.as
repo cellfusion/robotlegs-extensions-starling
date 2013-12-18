@@ -5,7 +5,7 @@
 //  in accordance with the terms of the license agreement accompanying it. 
 //------------------------------------------------------------------------------
 
-package robotlegs.bender.extensions.stageSync
+package robotlegs.bender.extensions.contextView
 {
 	import robotlegs.bender.extensions.matching.instanceOfType;
 
@@ -30,8 +30,6 @@ package robotlegs.bender.extensions.stageSync
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private const _uid:String = UID.create(StarlingStageSyncExtension);
-
 		private var _context:IContext;
 
 		private var _contextView:DisplayObjectContainer;
@@ -49,10 +47,6 @@ package robotlegs.bender.extensions.stageSync
 			_context.addConfigHandler(instanceOfType(DisplayObjectContainer), handleContextView);
 		}
 
-		public function toString():String
-		{
-			return _uid;
-		}
 
 		/*============================================================================*/
 		/* Private Functions                                                          */
@@ -60,6 +54,11 @@ package robotlegs.bender.extensions.stageSync
 
 		private function handleContextView(view:DisplayObjectContainer):void
 		{
+			if (_contextView) {
+				_logger.warn('A contextView has already been installed, ignoring {0}', [view]);
+				return;
+			}
+
 			_contextView = view;
 			if (_contextView.stage)
 			{

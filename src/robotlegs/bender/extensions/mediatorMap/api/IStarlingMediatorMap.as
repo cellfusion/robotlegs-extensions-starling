@@ -14,15 +14,17 @@ package robotlegs.bender.extensions.mediatorMap.api
 	public interface IStarlingMediatorMap
 	{
 		function mapMatcher(matcher:ITypeMatcher):IMediatorMapper;
-		
+
 		function map(type:Class):IMediatorMapper;
-		
+
 		function unmapMatcher(matcher:ITypeMatcher):IMediatorUnmapper;
-		
+
 		function unmap(type:Class):IMediatorUnmapper;
-		
+
 		function mediate(item:Object):void;
-		
+
 		function unmediate(item:Object):void;
+
+		function unmediateAll():void;
 	}
 }

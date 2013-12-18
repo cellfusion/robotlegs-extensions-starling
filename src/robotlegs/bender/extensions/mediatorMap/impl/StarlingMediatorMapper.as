@@ -9,11 +9,11 @@ package robotlegs.bender.extensions.mediatorMap.impl
 {
 	import flash.utils.Dictionary;
 	import robotlegs.bender.extensions.mediatorMap.api.IMediatorMapping;
-	import robotlegs.bender.extensions.mediatorMap.api.IStarlingMediatorViewHandler;
 	import robotlegs.bender.extensions.mediatorMap.dsl.IMediatorConfigurator;
 	import robotlegs.bender.extensions.mediatorMap.dsl.IMediatorMapper;
 	import robotlegs.bender.extensions.mediatorMap.dsl.IMediatorUnmapper;
 	import robotlegs.bender.extensions.matching.ITypeFilter;
+	import robotlegs.bender.extensions.viewManager.api.IStarlingViewHandler;
 	import robotlegs.bender.framework.api.ILogger;
 
 	public class StarlingMediatorMapper implements IMediatorMapper, IMediatorUnmapper
@@ -27,7 +27,7 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		
 		private var _typeFilter:ITypeFilter;
 		
-		private var _handler:IStarlingMediatorViewHandler;
+		private var _handler:StarlingMediatorViewHandler;
 
 		private var _logger:ILogger;
 
@@ -35,7 +35,7 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		/* Constructor                                                                */
 		/*============================================================================*/
 		
-		public function StarlingMediatorMapper(typeFilter:ITypeFilter, handler:IStarlingMediatorViewHandler, logger:ILogger = null)
+		public function StarlingMediatorMapper(typeFilter:ITypeFilter, handler:StarlingMediatorViewHandler, logger:ILogger = null)
 		{
 			_typeFilter = typeFilter;
 			_handler = handler;

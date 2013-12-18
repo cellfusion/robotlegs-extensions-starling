@@ -11,6 +11,7 @@ package robotlegs.bender.extensions.mediatorMap
 	
 	import robotlegs.bender.extensions.mediatorMap.api.IMediatorFactory;
 	import robotlegs.bender.extensions.mediatorMap.api.IStarlingMediatorMap;
+	import robotlegs.bender.extensions.mediatorMap.api.IStarlingMediatorMap;
 	import robotlegs.bender.extensions.mediatorMap.impl.MediatorFactory;
 	import robotlegs.bender.extensions.mediatorMap.impl.StarlingMediatorManager;
 	import robotlegs.bender.extensions.mediatorMap.impl.StarlingMediatorMap;
@@ -27,15 +28,12 @@ package robotlegs.bender.extensions.mediatorMap
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var _context:IContext;
-
 		private var _injector:IInjector;
 
-		private var _mediatorMap:IStarlingMediatorMap;
+		private var _mediatorMap:StarlingMediatorMap;
 
 		private var _viewManager:IStarlingViewManager;
 
-		private var _mediatorManager:StarlingMediatorManager;
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
@@ -43,25 +41,43 @@ package robotlegs.bender.extensions.mediatorMap
 
 		public function extend(context:IContext):void
 		{
-			_context = context;
+			context.beforeInitializing(beforeInitializing)
+					.beforeDestroying(beforeDestroying)
+					.whenDestroying(whenDestroying);
+
 			_injector = context.injector;
 			_injector.map(IStarlingMediatorMap).toSingleton(StarlingMediatorMap);
-			// todo: figure out why this is done as preInitialize
-			_context.beforeInitializing(handleContextPreInitialize);
 		}
 
 		/*============================================================================*/
 		/* Private Functions                                                          */
 		/*============================================================================*/
 
-		private function handleContextPreInitialize():void
+		private function beforeInitializing():void
 		{
 			_mediatorMap = _injector.getInstance(IStarlingMediatorMap);
-			_mediatorManager = _injector.getInstance(StarlingMediatorManager);
 			if (_injector.satisfiesDirectly(IStarlingViewManager))
 			{
 				_viewManager = _injector.getInstance(IStarlingViewManager);
-				_viewManager.addViewHandler(_mediatorMap as IStarlingViewHandler);
+				_viewManager.addViewHandler(_mediatorMap);
+			}
+		}
+
+		private function beforeDestroying():void
+		{
+			_mediatorMap.unmediateAll();
+			if (_injector.satisfiesDirectly(IStarlingViewManager))
+			{
+				_viewManager = _injector.getInstance(IStarlingViewManager);
+				_viewManager.removeViewHandler(_mediatorMap);
+			}
+		}
+
+		private function whenDestroying():void
+		{
+			if (_injector.satisfiesDirectly(IStarlingMediatorMap))
+			{
+				_injector.unmap(IStarlingMediatorMap);
 			}
 		}
 	}

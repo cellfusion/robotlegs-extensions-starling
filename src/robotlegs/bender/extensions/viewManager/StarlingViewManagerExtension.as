@@ -40,6 +40,9 @@ package robotlegs.bender.extensions.viewManager
 
 		public function extend(context:IContext):void
 		{
+			context.whenInitializing(handleContextSelfInitialize);
+			context.whenDestroying(handleContextSelfDestroy);
+
 			_injector = context.injector;
 
 			// Just one Container Registry
@@ -48,9 +51,7 @@ package robotlegs.bender.extensions.viewManager
 
 			// But you get your own View Manager
 			_injector.map(IStarlingViewManager).toSingleton(StarlingViewManager);
-			
-			context.whenInitializing(handleContextSelfInitialize);
-			context.whenDestroying(handleContextSelfDestroy);
+
 		}
 
 		/*============================================================================*/
