@@ -18,6 +18,7 @@ package robotlegs.bender.extensions.mediatorMap
 	import robotlegs.bender.extensions.viewManager.api.IStarlingViewManager;
 	import robotlegs.bender.framework.api.IContext;
 	import robotlegs.bender.framework.api.IExtension;
+	import robotlegs.bender.framework.api.IInjector;
 
 	public class StarlingMediatorMapExtension implements IExtension
 	{
@@ -28,7 +29,7 @@ package robotlegs.bender.extensions.mediatorMap
 
 		private var _context:IContext;
 
-		private var _injector:Injector;
+		private var _injector:IInjector;
 
 		private var _mediatorMap:IStarlingMediatorMap;
 

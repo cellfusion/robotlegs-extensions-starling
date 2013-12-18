@@ -14,6 +14,7 @@ package robotlegs.bender.extensions.viewManager
 	import robotlegs.bender.extensions.viewManager.impl.StarlingViewManager;
 	import robotlegs.bender.framework.api.IContext;
 	import robotlegs.bender.framework.api.IExtension;
+	import robotlegs.bender.framework.api.IInjector;
 
 	public class StarlingViewManagerExtension implements IExtension
 	{
@@ -29,7 +30,7 @@ package robotlegs.bender.extensions.viewManager
 		/* Private Properties                                                         */
 		/*============================================================================*/
 		
-		private var _injector:Injector;
+		private var _injector:IInjector;
 
 		private var _viewManager:IStarlingViewManager;
 
@@ -48,8 +49,8 @@ package robotlegs.bender.extensions.viewManager
 			// But you get your own View Manager
 			_injector.map(IStarlingViewManager).toSingleton(StarlingViewManager);
 			
-			context.lifecycle.whenInitializing(handleContextSelfInitialize);
-			context.lifecycle.whenDestroying(handleContextSelfDestroy);
+			context.whenInitializing(handleContextSelfInitialize);
+			context.whenDestroying(handleContextSelfDestroy);
 		}
 
 		/*============================================================================*/
