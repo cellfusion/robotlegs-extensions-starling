@@ -11,13 +11,14 @@ package robotlegs.bender.extensions.mediatorMap.impl
 	
 	import robotlegs.bender.extensions.matching.ITypeMatcher;
 	import robotlegs.bender.extensions.matching.TypeMatcher;
-	import robotlegs.bender.extensions.mediatorMap.api.IMediatorFactory;
 	import robotlegs.bender.extensions.mediatorMap.api.IStarlingMediatorMap;
 	import robotlegs.bender.extensions.mediatorMap.api.IStarlingMediatorViewHandler;
 	import robotlegs.bender.extensions.mediatorMap.dsl.IMediatorMapper;
 	import robotlegs.bender.extensions.mediatorMap.dsl.IMediatorUnmapper;
 	import robotlegs.bender.extensions.viewManager.api.IStarlingViewHandler;
-	
+	import robotlegs.bender.framework.api.IContext;
+	import robotlegs.bender.framework.api.ILogger;
+
 	import starling.display.DisplayObject;
 	
 	public class StarlingMediatorMap implements IStarlingMediatorMap, IStarlingViewHandler
@@ -28,20 +29,23 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		
 		private const _mappers:Dictionary = new Dictionary();
 		
-		private var _handler:IStarlingMediatorViewHandler;
-		
+		private var _logger:ILogger;
+
 		private var _factory:MediatorFactory;
-		
+
+		private var _viewHandler:IStarlingMediatorViewHandler;
+
 		private const NULL_UNMAPPER:IMediatorUnmapper = new NullMediatorUnmapper();
-		
+
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
 		
-		public function StarlingMediatorMap(factory:MediatorFactory, handler:IStarlingMediatorViewHandler = null)
+		public function StarlingMediatorMap(context:IContext)
 		{
-			_factory = factory;
-			_handler = handler || new StarlingMediatorViewHandler(_factory);
+			_logger = context.getLogger(this);
+			_factory = new MediatorFactory(context.injector);
+			_viewHandler = new StarlingMediatorViewHandler(_factory);
 		}
 		
 		/*============================================================================*/
@@ -72,18 +76,22 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		
 		public function handleView(view:DisplayObject, type:Class):void
 		{
-			_handler.handleView(view, type);
+			_viewHandler.handleView(view, type);
 		}
 		
 		public function mediate(item:Object):void
 		{
-			const type:Class = item.constructor;
-			_handler.handleItem(item, type);
+			_viewHandler.handleItem(item, item['constructor'] as Class);
 		}
 		
 		public function unmediate(item:Object):void
 		{
 			_factory.removeMediators(item);
+		}
+
+		public function unmediateAll():void
+		{
+			_factory.removeAllMediators();
 		}
 		
 		/*============================================================================*/
@@ -92,7 +100,7 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		
 		private function createMapper(matcher:ITypeMatcher, viewType:Class = null):IMediatorMapper
 		{
-			return new StarlingMediatorMapper(matcher.createTypeFilter(), _handler);
+			return new StarlingMediatorMapper(matcher.createTypeFilter(), _viewHandler, _logger);
 		}
 	}
 }

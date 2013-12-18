@@ -8,10 +8,9 @@
 package robotlegs.bender.extensions.mediatorMap.impl
 {
 	import flash.utils.Dictionary;
+
 	import robotlegs.bender.extensions.mediatorMap.api.IStarlingMediatorViewHandler;
 	import robotlegs.bender.extensions.mediatorMap.api.IMediatorMapping;
-	import robotlegs.bender.extensions.matching.ITypeFilter;
-	import robotlegs.bender.extensions.mediatorMap.api.IMediatorFactory;
 	import starling.display.DisplayObject;
 	
 	public class StarlingMediatorViewHandler implements IStarlingMediatorViewHandler

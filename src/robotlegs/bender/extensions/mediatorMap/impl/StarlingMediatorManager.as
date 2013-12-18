@@ -9,10 +9,8 @@ package robotlegs.bender.extensions.mediatorMap.impl
 {
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
-	
-	import robotlegs.bender.extensions.mediatorMap.api.IMediatorFactory;
+
 	import robotlegs.bender.extensions.mediatorMap.api.IMediatorMapping;
-	import robotlegs.bender.extensions.mediatorMap.api.MediatorFactoryEvent;
 	
 	import starling.display.DisplayObject;
 	import starling.events.Event;
@@ -27,6 +25,8 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		private static var UIComponentClass:Class;
 
 		private static const flexAvailable:Boolean = checkFlex();
+
+		private static const CREATION_COMPLETE:String = "creationComplete";
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
@@ -43,8 +43,6 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		public function StarlingMediatorManager(factory:MediatorFactory)
 		{
 			_factory = factory;
-			_factory.addEventListener(MediatorFactoryEvent.MEDIATOR_CREATE, onMediatorCreate);
-			_factory.addEventListener(MediatorFactoryEvent.MEDIATOR_REMOVE, onMediatorRemove);
 		}
 
 		/*============================================================================*/
@@ -64,63 +62,88 @@ package robotlegs.bender.extensions.mediatorMap.impl
 			return UIComponentClass != null;
 		}
 
-		/*============================================================================*/
-		/* Private Functions                                                          */
-		/*============================================================================*/
 
-		private function onMediatorCreate(event:MediatorFactoryEvent):void
+
+		public function addMediator(mediator:Object, item:Object, mapping:IMediatorMapping):void
 		{
-			const view:DisplayObject = event.view as DisplayObject;
-			if (!view)
-				return;
-			_mappings[event.view] ||= [];
-			_mappings[event.view].push(event.mapping);
-			view.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+			const displayObject:DisplayObject = item as DisplayObject;
 
-			if (flexAvailable && (event.view is UIComponentClass) && !event.view['initialized'])
+			if (!displayObject) {
+				initializeMediator(mediator, item);
+				return;
+			}
+
+			if (mapping.autoRemoveEnabled)
 			{
-				view.addEventListener('creationComplete', function(e:Event):void {
-					view.removeEventListener('creationComplete', arguments.callee);
-					// check that we haven't been removed in the meantime
-					if (_factory.getMediator(event.view, event.mapping))
-						initializeMediator(view, event.mediator);
+				// Watch this view for removal
+				displayObject.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+			}
+
+			if (flexAvailable && (displayObject is UIComponentClass) && !displayObject['initialized'])
+			{
+				displayObject.addEventListener(CREATION_COMPLETE, function(e:Event):void
+				{
+					displayObject.removeEventListener(CREATION_COMPLETE, arguments.callee);
+					// ensure that we haven't been removed in the meantime
+					if (_factory.getMediator(displayObject, mapping))
+						initializeMediator(mediator, displayObject);
 				});
 			}
 			else
 			{
-				initializeMediator(view, event.mediator);
+				initializeMediator(mediator, displayObject);
 			}
+
 		}
 
-		private function onMediatorRemove(event:MediatorFactoryEvent):void
+		public function removeMediator(mediator:Object, item:Object, mapping:IMediatorMapping):void
 		{
-			const view:DisplayObject = event.view as DisplayObject;
-			if (!view)
-				return;
-			view.removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			// note: as far as I know, the re-parenting issue does not exist with Flex 4+.
-			// question: should we bother handling re-parenting?
-			destroyMediator(event.mediator);
+			const displayObject:DisplayObject = item as DisplayObject;
+
+			if (displayObject)
+				displayObject.removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+
+			if (mediator)
+				destroyMediator(mediator);
 		}
+
+		/*============================================================================*/
+		/* Private Functions                                                          */
+		/*============================================================================*/
 
 		private function onRemovedFromStage(event:Event):void
 		{
 			_factory.removeMediators(event.target);
 		}
 
-		private function initializeMediator(view:DisplayObject, mediator:Object):void
+		private function initializeMediator(mediator:Object, mediatedItem:Object):void
 		{
-			if (mediator.hasOwnProperty('viewComponent'))
-				mediator.viewComponent = view;
+			if ('preInitialize' in mediator)
+				mediator.preInitialize();
 
-			if (mediator.hasOwnProperty('initialize'))
+			if ('viewComponent' in mediator)
+				mediator.viewComponent = mediatedItem;
+
+			if ('initialize' in mediator)
 				mediator.initialize();
+
+			if ('postInitialize' in mediator)
+				mediator.postInitialize();
 		}
 
 		private function destroyMediator(mediator:Object):void
 		{
-			if (mediator.hasOwnProperty('destroy'))
+			if ('preDestroy' in mediator)
+				mediator.preDestroy();
+
+			if ('destroy' in mediator)
 				mediator.destroy();
+
+			if ('viewComponent' in mediator)
+				mediator.viewComponent = null;
+
+			if ('postDestroy' in mediator)
+				mediator.postDestroy();
 		}
 	}
 }
