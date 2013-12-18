@@ -45,10 +45,9 @@ package robotlegs.bender.extensions.mediatorMap
 		{
 			_context = context;
 			_injector = context.injector;
-			_injector.map(IMediatorFactory).toSingleton(MediatorFactory);
 			_injector.map(IStarlingMediatorMap).toSingleton(StarlingMediatorMap);
 			// todo: figure out why this is done as preInitialize
-			_context.lifecycle.beforeInitializing(handleContextPreInitialize);
+			_context.beforeInitializing(handleContextPreInitialize);
 		}
 
 		/*============================================================================*/
