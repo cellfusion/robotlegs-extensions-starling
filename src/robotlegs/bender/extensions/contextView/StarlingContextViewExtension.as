@@ -7,8 +7,9 @@
 
 package robotlegs.bender.extensions.contextView
 {
-	import org.hamcrest.object.instanceOf;
-	
+
+	import robotlegs.bender.extensions.matching.instanceOfType;
+
 	import robotlegs.bender.framework.api.IContext;
 	import robotlegs.bender.framework.api.IExtension;
 	import robotlegs.bender.framework.api.ILogger;
@@ -45,7 +46,7 @@ package robotlegs.bender.extensions.contextView
 		{
 			_context = context;
 			_logger = context.getLogger(this);
-			_context.addConfigHandler(instanceOf(DisplayObjectContainer), handleContextView);
+			_context.addConfigHandler(instanceOfType(DisplayObjectContainer), handleContextView);
 		}
 
 		public function toString():String
