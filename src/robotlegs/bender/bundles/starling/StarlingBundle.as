@@ -12,7 +12,6 @@ package robotlegs.bender.bundles.starling
 	import robotlegs.bender.extensions.localEventMap.LocalEventMapExtension;
 	import robotlegs.bender.extensions.mediatorMap.StarlingMediatorMapExtension;
 	import robotlegs.bender.extensions.modularity.StarlingModularityExtension;
-	import robotlegs.bender.extensions.viewManager.ManualStageObserverExtension;
 	import robotlegs.bender.extensions.viewManager.ManualStarlingStageObserverExtension;
 	import robotlegs.bender.extensions.viewManager.StarlingStageObserverExtension;
 	import robotlegs.bender.extensions.viewManager.StarlingViewManagerExtension;

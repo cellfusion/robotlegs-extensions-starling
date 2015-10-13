@@ -7,15 +7,8 @@
 
 package robotlegs.bender.extensions.mediatorMap
 {
-	import org.swiftsuspenders.Injector;
-	
-	import robotlegs.bender.extensions.mediatorMap.api.IMediatorFactory;
 	import robotlegs.bender.extensions.mediatorMap.api.IStarlingMediatorMap;
-	import robotlegs.bender.extensions.mediatorMap.api.IStarlingMediatorMap;
-	import robotlegs.bender.extensions.mediatorMap.impl.MediatorFactory;
-	import robotlegs.bender.extensions.mediatorMap.impl.StarlingMediatorManager;
 	import robotlegs.bender.extensions.mediatorMap.impl.StarlingMediatorMap;
-	import robotlegs.bender.extensions.viewManager.api.IStarlingViewHandler;
 	import robotlegs.bender.extensions.viewManager.api.IStarlingViewManager;
 	import robotlegs.bender.framework.api.IContext;
 	import robotlegs.bender.framework.api.IExtension;
