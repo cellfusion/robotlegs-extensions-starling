@@ -13,8 +13,8 @@ Also, Alessandro Bianco wrote example for his port, you can see it [here](https:
 ## Libraries
 Libraries required for this extension are:
 
-- Robotlegs v2.0.0b1
-- Starling v1.2
+- Robotlegs v2.2.1
+- Starling v1.7
 
 ## Credits
 Original extension author is [Omar Gonzalez](https://github.com/s9tpepper).
