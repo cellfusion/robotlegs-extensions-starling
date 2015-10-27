@@ -30,7 +30,7 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		
 		private var _logger:ILogger;
 
-		private var _factory:MediatorFactory;
+		private var _factory:StarlingMediatorFactory;
 
 		private var _viewHandler:StarlingMediatorViewHandler;
 
@@ -43,7 +43,7 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		public function StarlingMediatorMap(context:IContext)
 		{
 			_logger = context.getLogger(this);
-			_factory = new MediatorFactory(context.injector);
+			_factory = new StarlingMediatorFactory(context.injector);
 			_viewHandler = new StarlingMediatorViewHandler(_factory);
 		}
 		

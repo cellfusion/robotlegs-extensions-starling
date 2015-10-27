@@ -75,9 +75,9 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		/* Private Functions                                                          */
 		/*============================================================================*/
 		
-		private function createMapping(mediatorClass:Class):MediatorMapping
+		private function createMapping(mediatorClass:Class):StarlingMediatorMapping
 		{
-			const mapping:MediatorMapping = new MediatorMapping(_typeFilter, mediatorClass);
+			const mapping:StarlingMediatorMapping = new StarlingMediatorMapping(_typeFilter, mediatorClass);
 			_handler.addMapping(mapping);
 			_mappings[mediatorClass] = mapping;
 			_logger && _logger.debug('{0} mapped to {1}', [_typeFilter, mapping]);

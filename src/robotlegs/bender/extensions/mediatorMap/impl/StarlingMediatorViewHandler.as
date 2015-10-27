@@ -25,13 +25,13 @@ package robotlegs.bender.extensions.mediatorMap.impl
 		
 		private var _knownMappings:Dictionary = new Dictionary(true);
 		
-		private var _factory:MediatorFactory;
+		private var _factory:StarlingMediatorFactory;
 		
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
 		
-		public function StarlingMediatorViewHandler(factory:MediatorFactory):void
+		public function StarlingMediatorViewHandler(factory:StarlingMediatorFactory):void
 		{
 			_factory = factory;
 		}

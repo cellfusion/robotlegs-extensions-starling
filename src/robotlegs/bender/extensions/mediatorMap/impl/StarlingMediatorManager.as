@@ -34,13 +34,13 @@ package robotlegs.bender.extensions.mediatorMap.impl
 
 		private const _mappings:Dictionary = new Dictionary();
 
-		private var _factory:MediatorFactory;
+		private var _factory:StarlingMediatorFactory;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
 
-		public function StarlingMediatorManager(factory:MediatorFactory)
+		public function StarlingMediatorManager(factory:StarlingMediatorFactory)
 		{
 			_factory = factory;
 		}
@@ -64,7 +64,7 @@ package robotlegs.bender.extensions.mediatorMap.impl
 
 
 
-		public function addMediator(mediator:Object, item:Object, mapping:IMediatorMapping):void
+		public function addMediator(mediator:Object, item:Object, mapping:StarlingMediatorMapping):void
 		{
 			const displayObject:DisplayObject = item as DisplayObject;
 
